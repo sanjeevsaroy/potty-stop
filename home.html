@@ -12,13 +12,25 @@
     <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.7.0/firebase.js"></script>
+
+    <!-- GeoFire -->
+    <script src="https://cdn.firebase.com/libs/geofire/4.1.2/geofire.min.js"></script>
   </head>
   <body>
-
+    <!-- Heading -->
     <h1>Welcome, <span id="heading-email"></span></h1>
     <button id="btn-logout" type="button" name="button">Log Out</button>
+
+    <!-- Google Map -->
+    <div id="map"></div>
+
     <!-- JavaScript -->
     <script type="text/javascript" src="firebase.js"></script>
     <script type="text/javascript" src="home.js"></script>
+    <!-- Google Maps -->
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBeJd3CwcJzuzCbKkrL-pWAmqYgzX6yjjs&callback=initMap">
+    </script>
   </body>
 </html>
