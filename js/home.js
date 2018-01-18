@@ -61,17 +61,24 @@ function initMap() {
         content: 'Your current location'
       });
 
+      // On map click (no marker)
+      map.addListener('click', function() {
+        console.log("CLICK!");
+      });
+
+
+      // Marker click listener
       marker.addListener('click', function() {
         infowindow.open(map, marker);
+
+        map.panTo(marker.position);
 
         // Close existing info windows that are open
         if (openWindow != null) {
           openWindow.close();
         }
-
         openWindow = infowindow;
       });
-
     }, function() {
       console.log("Unable to get location");
     });
@@ -83,9 +90,29 @@ var database = firebase.database();
 var facilitiesRef = database.ref('facilities');
 var locationsRef = database.ref('locations')
 var geofire = new GeoFire(locationsRef);
-var openWindow;
 
-facilitiesRef.on('value', function(snapshot) {
+var headingField = $('#name');
+var hasChangingField = $('#hasChanging');
+var hasFeedingField = $('#hasFeeding');
+var hasWarmingField = $('#hasWarming');
+var ratingField = $('#rating');
+
+var emptyStar = '<i class="fa fa-star-o" aria-hidden="true"></i>';
+var fullStar = '<i class="fa fa-star" aria-hidden="true"></i>';
+
+var openWindow;
+var popupWindow = $('#pop-up-facility');
+var closeBtn = $('#btn-close');
+
+closeBtn.click(function() {
+  if (openWindow != null) {
+    openWindow.close();
+    openWindow = null;
+    popupWindow.css('visibility', 'hidden');
+  }
+});
+
+facilitiesRef.limitToFirst(2500).on('value', function(snapshot) {
   snapshot.forEach(function (childsnapshot) {
     var key = childsnapshot.key;
 
@@ -95,15 +122,16 @@ facilitiesRef.on('value', function(snapshot) {
       // Place marker
       var childData = childsnapshot.val();
 
-      var contentString =
-      '<h1>' + childData.name + '</h1>'
-      + "Changing : " + childData.facilities.changing + '</br>'
-      + "Feeding: " + childData.facilities.feeding + '</br>'
-      + "Warming : " + childData.facilities.warming + '</br>';
+      // var contentString =
+      // '<img src="https://images.unsplash.com/photo-1504087697492-238a6bf49ce8?auto=format&fit=crop&w=500&q=180" alt="Facility Image">'
+      // + '<h1>' + childData.name + '</h1>'
+      // + "Changing : " + childData.facilities.changing + '</br>'
+      // + "Feeding: " + childData.facilities.feeding + '</br>'
+      // + "Warming : " + childData.facilities.warming + '</br>';
 
       // Create infoWindow
       var infowindow = new google.maps.InfoWindow({
-        content: contentString
+        content: 'Selected'
       });
 
       // Create a marker
@@ -114,17 +142,66 @@ facilitiesRef.on('value', function(snapshot) {
         icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|944'
       });
 
-      // Add a marker listener
+      // // Add a marker listener
+      // marker.addListener('click', function() {
+      //   infowindow.open(map, marker);
+      //
+      //   // Close existing info windows that are open
+      //   if (openWindow != null) {
+      //     openWindow.close();
+      //   }
+      //
+      //   openWindow = infowindow;
+      // });
+
+      // Center map on the selected marker
       marker.addListener('click', function() {
+        map.panTo(marker.position);
+
         infowindow.open(map, marker);
+
+        // On InfoWindow Close
+        google.maps.event.addListener(infowindow,'closeclick',function() {
+          openWindow = null;
+          popupWindow.css('visibility', 'hidden');
+        });
 
         // Close existing info windows that are open
         if (openWindow != null) {
           openWindow.close();
         }
-
         openWindow = infowindow;
+
+        var name = childData.name;
+        if (name.charAt(0) === '"') {
+          name = name.substr(1).slice(0, -1);
+        }
+
+        // Get random number for rating
+        var rating = Math.floor(Math.random() * 5);
+        console.log(rating);
+
+        headingField.text(name);
+        hasChangingField.text(childData.facilities.changing);
+        hasFeedingField.text(childData.facilities.feeding);
+        hasWarmingField.text(childData.facilities.warming);
+
+        // Display rating stars
+        ratingField.text("");
+        var emptyStars = 5 - rating;
+
+        for (var i = 0; i < rating; i++) {
+          ratingField.append(fullStar);
+        }
+
+        for (var i = 0; i < emptyStars; i++) {
+          ratingField.append(emptyStar);
+        }
+
+        // Show pop-up
+        popupWindow.css('visibility', 'visible');
       });
+
     });
   });
 });

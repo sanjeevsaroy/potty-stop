@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="css/default.css">
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/5afdbdcf18.css">
     <!-- Firebase Imports -->
     <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-auth.js"></script>
@@ -18,12 +20,41 @@
     <script src="https://cdn.firebase.com/libs/geofire/4.1.2/geofire.min.js"></script>
   </head>
   <body>
+
     <!-- Heading -->
-    <h1>Welcome, <span id="heading-email"></span></h1>
+    <!-- <h1>Welcome, <a href="profile.html" id="heading-email"></a></h1> -->
+    <h1>Welcome, <span href="profile.html" id="heading-email"></span></h1>
     <button id="btn-logout" type="button" name="button">Log Out</button>
 
-    <!-- Google Map -->
-    <div id="map"></div>
+    <div id="main">
+      <!-- Google Map -->
+      <div id="map"></div>
+
+      <!-- Floating information div -->
+      <div id="pop-up-facility">
+        <div id="cover-photo">
+          <div id="btn-close">
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </div>
+          <div id="image">
+            <img src="https://images.unsplash.com/photo-1504087697492-238a6bf49ce8?auto=format&fit=crop&w=500&q=180" alt="Facility Image">
+          </div>
+          <div id="tint"></div>
+          <h2 id="name"></h2>
+        </div>
+        <div id="info">
+          <p>
+            Changing: <span id="hasChanging"></span><br>
+            Feeding: <span id="hasFeeding"></span><br>
+            Warming: <span id="hasWarming"></span><br>
+          </p>
+          <p>
+            Rating:<br>
+            <span id="rating"></span>
+          </p>
+        </div>
+      </div>
+    </div>
 
     <!-- JavaScript -->
     <script type="text/javascript" src="js/firebase.js"></script>
