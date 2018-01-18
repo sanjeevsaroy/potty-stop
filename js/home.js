@@ -36,6 +36,46 @@ function initMap() {
     zoom: 4,
     center: uluru
   });
+
+  // Try and get location
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+
+      // Center map in found location
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      map.setCenter(pos);
+      map.setZoom(12);
+
+      // Set marker
+      var marker = new google.maps.Marker({
+        position: pos,
+        map: map,
+        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|193'
+      });
+
+      var infowindow = new google.maps.InfoWindow({
+        content: 'Your current location'
+      });
+
+      marker.addListener('click', function() {
+        infowindow.open(map, marker);
+
+        // Close existing info windows that are open
+        if (openWindow != null) {
+          openWindow.close();
+        }
+
+        openWindow = infowindow;
+      });
+
+    }, function() {
+      console.log("Unable to get location");
+    });
+  }
 }
 
 // Load facilities
@@ -70,7 +110,8 @@ facilitiesRef.on('value', function(snapshot) {
       var pos = {lat: location[0], lng: location[1]};
       var marker = new google.maps.Marker({
         position: pos,
-        map: map
+        map: map,
+        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|944'
       });
 
       // Add a marker listener
