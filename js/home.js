@@ -1,13 +1,11 @@
 // Assign email to heading
-var emailHeading = $('#heading-email');
+var nameHeading = $('#heading-name');
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     // User is signed in.
     console.log("User signed in!");
-
-    var email = user.email;
-    emailHeading.html(email);
+    nameHeading.text(user.displayName);
   }
   else {
     // User is signed out.
@@ -17,12 +15,15 @@ firebase.auth().onAuthStateChanged(function(user) {
 });
 
 // Logout listener
-var logoutBtn = $('#btn-logout');
-
-logoutBtn.click( function() {
+$('#btn-logout').click(function() {
   firebase.auth().signOut().catch(function (error) {
     console.log(error);
   });
+});
+
+// View profile listener
+$('#btn-view-profile').click(function() {
+  window.location.href = "profile.html";
 });
 
 // Load maps
