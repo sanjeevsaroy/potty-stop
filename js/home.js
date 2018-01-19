@@ -95,7 +95,10 @@ var headingField = $('#name');
 var hasChangingField = $('#hasChanging');
 var hasFeedingField = $('#hasFeeding');
 var hasWarmingField = $('#hasWarming');
-var ratingField = $('#rating');
+
+var cleanlinessRatingField = $('#rating-cleanliness');
+var facilitiesRatingField = $('#rating-facilities');
+var privacyRatingField = $('#rating-privacy');
 
 var emptyStar = '<i class="fa fa-star-o" aria-hidden="true"></i>';
 var fullStar = '<i class="fa fa-star" aria-hidden="true"></i>';
@@ -177,25 +180,29 @@ facilitiesRef.limitToFirst(2500).on('value', function(snapshot) {
           name = name.substr(1).slice(0, -1);
         }
 
-        // Get random number for rating
-        var rating = Math.floor(Math.random() * 5);
-        console.log(rating);
-
         headingField.text(name);
         hasChangingField.text(childData.facilities.changing);
         hasFeedingField.text(childData.facilities.feeding);
         hasWarmingField.text(childData.facilities.warming);
 
         // Display rating stars
-        ratingField.text("");
-        var emptyStars = 5 - rating;
+        var ratingFields = [cleanlinessRatingField, facilitiesRatingField, privacyRatingField];
 
-        for (var i = 0; i < rating; i++) {
-          ratingField.append(fullStar);
-        }
+        for (var i = 0; i < ratingFields.length; i++) {
+          var ratingField = ratingFields[i];
+          ratingField.text("");
 
-        for (var i = 0; i < emptyStars; i++) {
-          ratingField.append(emptyStar);
+          // Get random number for rating
+          var rating = Math.floor(Math.random() * 5);
+          var emptyStars = 5 - rating;
+
+          for (var j = 0; j < rating; j++) {
+            ratingField.append(fullStar);
+          }
+
+          for (var n = 0; n < emptyStars; n++) {
+            ratingField.append(emptyStar);
+          }
         }
 
         // Show pop-up
