@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Profile - Potty Stop</title>
+
+    <!-- CSS Styling -->
+    <link rel="stylesheet" href="css/default.css">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Firebase Imports -->
+    <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.7.0/firebase.js"></script>
+  </head>
+  <body>
+    <!-- Profile heading -->
+    <h1>Welcome to your profile, <span id="heading-name"></span></h1>
+    <img id="img-profile" src="" alt="Profile Picture"><br>
+    <!-- Back button -->
+    <button id="btn-back" type="button" name="button">Go back</button><br>
+    <!-- Log Out button -->
+    <button id="btn-logout" type="button" name="button">Log Out</button><br>
+    <!-- Edit Profile button -->
+    <button id="btn-edit-profile" type="button" name="button">Edit Profile</button>
+
+    <form id="form-edit-profile" class="" method="post">
+      Name: <input id="input-name" type="text" name="" value=""><br>
+      Email: <input id="input-email" type="text" name="" value=""><br>
+      Photo URL: <input id="input-photo-url" type="text" name="" value=""><br>
+      <button id="btn-save" type="button" name="button">Save Changes</button>
+      <span id="notice-save-successful">Changes saved!</span>
+    </form>
+
+
+    <!-- JavaScript -->
+    <script type="text/javascript" src="js/firebase.js"></script>
+    <script type="text/javascript" src="js/profile.js"></script>
+  </body>
+</html>
