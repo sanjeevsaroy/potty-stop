@@ -1,6 +1,10 @@
 // Assign email to heading
 var nameHeading = $('#heading-name');
 var profileImage = $('#img-profile');
+var totalFacilitiesField = $('#total-facilities');
+var totalCommentsField = $('#total-comments');
+var totalRatingsField = $('#total-ratings');
+
 var nameInputField = $('#input-name');
 var emailInputField = $('#input-email');
 var photoUrlInputField = $('#input-photo-url');
@@ -15,6 +19,25 @@ firebase.auth().onAuthStateChanged(function(user) {
     nameInputField.attr('value', user.displayName);
     emailInputField.attr('value', user.email);
     photoUrlInputField.attr('value', user.photoURL);
+
+    // Get user actions
+    firebase.database().ref('users/' + user.uid).once('value')
+      .then(function(snapshot) {
+
+          var val = snapshot.val();
+          var numOfFacilities = Object.keys(val.facilities).length;
+          var numOfComments = Object.keys(val.comments).length;
+          var numOfRatings = val.ratings;
+
+          totalFacilitiesField.text(numOfFacilities);
+          totalCommentsField.text(numOfComments);
+          totalRatingsField.text(numOfRatings);
+
+          console.log(numOfFacilities, numOfComments, numOfRatings);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   }
   else {
     // User is signed out.
