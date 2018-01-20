@@ -4,6 +4,7 @@ var profileImage = $('#img-profile');
 var totalFacilitiesField = $('#total-facilities');
 var totalCommentsField = $('#total-comments');
 var totalRatingsField = $('#total-ratings');
+var activityList = $('#list-activity');
 
 var nameInputField = $('#input-name');
 var emailInputField = $('#input-email');
@@ -14,6 +15,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     // User is signed in.
     console.log("User signed in!");
 
+    // User info
     nameHeading.text(user.displayName);
     profileImage.attr('src', user.photoURL);
     nameInputField.attr('value', user.displayName);
@@ -24,6 +26,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     firebase.database().ref('users/' + user.uid).once('value')
       .then(function(snapshot) {
 
+          // Add activity stats
           var val = snapshot.val();
           var numOfFacilities = Object.keys(val.facilities).length;
           var numOfComments = Object.keys(val.comments).length;
@@ -34,6 +37,28 @@ firebase.auth().onAuthStateChanged(function(user) {
           totalRatingsField.text(numOfRatings);
 
           console.log(numOfFacilities, numOfComments, numOfRatings);
+
+          // Add activity list
+          var activities = val.activity;
+
+          // Convert into array
+          activities = $.map(activities, function(value, index) {
+            return [value];
+          });
+
+          // Sort in chronological order
+          activities.sort(function(a, b){
+              return a.createdAt-b.createdAt;
+          });
+
+          for (var i = 0; i < activities.length; i++) {
+            var obj = activities[i];
+            var activity = new Activity(obj.name, obj.type, obj.createdAt);
+
+            // Insert into activity list
+            var activityListItem = createActivityListItem(activity);
+            activityList.append(activityListItem);
+          }
       })
       .catch(function(error) {
         console.log(error);
@@ -45,6 +70,43 @@ firebase.auth().onAuthStateChanged(function(user) {
     window.location.href = "login.html";
   }
 });
+
+function createActivityListItem(activity) {
+  var activityListItem;
+
+  var date = convertToDate(activity.createdAt);
+
+  if (activity.type === 'facility') {
+    activityListItem = $('<li>You created the facility ' + activity.name + ' at ' + date + '</li>');
+  }
+  else {
+    activityListItem = $('<li>You created a comment on ' + activity.name + ' at ' + date + '</li>');
+  }
+
+  return activityListItem;
+}
+
+function convertToDate(timestamp) {
+  var datetime = new Date(timestamp);
+
+  var date = datetime.toLocaleDateString();
+  var time = datetime.getHours() + ':' + datetime.getMinutes();
+
+  var isToday = (new Date().toDateString() == datetime.toDateString());
+
+  if (isToday) {
+    return time;
+  }
+  else {
+    return date;;
+  }
+}
+
+function Activity(name, type, createdAt) {
+  this.name = name;
+  this.type = type;
+  this.createdAt = createdAt;
+}
 
 // Logout listener
 $('#btn-logout').click( function() {
