@@ -20,7 +20,13 @@ firebase.auth().onAuthStateChanged(function(user) {
     profileImage.attr('src', user.photoURL);
     nameInputField.attr('value', user.displayName);
     emailInputField.attr('value', user.email);
-    photoUrlInputField.attr('value', user.photoURL);
+
+    if (user.photoURL === null) {
+      profileImage.attr('src', 'https://www.menon.no/wp-content/uploads/person-placeholder.jpg');
+    }
+    else {
+      profileImage.attr('src', user.photoURL);
+    }
 
     // Get user actions
     firebase.database().ref('users/' + user.uid).once('value')
@@ -28,9 +34,30 @@ firebase.auth().onAuthStateChanged(function(user) {
 
           // Add activity stats
           var val = snapshot.val();
-          var numOfFacilities = Object.keys(val.facilities).length;
-          var numOfComments = Object.keys(val.comments).length;
-          var numOfRatings = val.ratings;
+          var numOfFacilities;
+          var numOfComments;
+          var numOfRatings;
+
+          if (val.hasOwnProperty('facilities')) {
+            numOfFacilities = Object.keys(val.facilities).length;
+          }
+          else {
+            numOfFacilities = 0;
+          }
+
+          if (val.hasOwnProperty('comments')) {
+            numOfComments = Object.keys(val.comments).length;
+          }
+          else {
+            numOfComments = 0;
+          }
+
+          if (val.hasOwnProperty('ratings')) {
+            numOfRatings = val.ratings;
+          }
+          else {
+            numOfRatings = 0;
+          }
 
           totalFacilitiesField.text(numOfFacilities);
           totalCommentsField.text(numOfComments);
@@ -260,7 +287,14 @@ function updatePhotoUrl(user, photoUrl) {
   .then(function() {
     // Update successful.
     if (!hasError) {
-      profileImage.attr('src', photoUrl);
+
+      if (user.photoURL === null) {
+        profileImage.attr('src', 'https://www.menon.no/wp-content/uploads/person-placeholder.jpg');
+      }
+      else {
+        profileImage.attr('src', user.photoURL);
+      }
+
       showSaveSuccess(true);
       currentPhotoUrl = photoUrl;
     }
