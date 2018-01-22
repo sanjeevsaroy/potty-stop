@@ -15,16 +15,26 @@
   </head>
   <body>
 
-    <!-- Form headings -->
-    <h1>Log in!</h1>
-    <p>Not a registered user? Please <a href="http://www.potty-stop.com/" target="_blank">download the app</a> to register an account.</p>
-
     <!-- Login Form -->
-    <form id="login-form" action="index.html" method="post">
-      Email Address <input id="input-email" type="text" name="" value=""> <br>
-      Password: <input id="input-pwd" type="password" name="" value=""> <br>
-      <input id="form-submit" type="button" name="submit" value="Submit">
+    <h1>Log in!</h1>
+
+    <form id="form-login" method="post">
+      Email Address: <input class="input-email" type="text" name="" value=""><br>
+      Password: <input class="input-pwd" type="password" name="" value=""><br>
+      <input id="btn-login" type="button" name="submit" value="Submit">
     </form>
+
+    <!-- Register Form -->
+    <h1>Or register to use the app</h1>
+
+    <form id="form-register" method="post">
+      Full Name: <input class="input-name" type="text" name="" value=""><br>
+      Email Address: <input class="input-email" type="text" name="" value=""><br>
+      Password: <input class="input-pwd" type="password" name="" value=""><br>
+      Confirm Password: <input class="input-confirm-pwd" type="password" name="" value=""><br>
+      <input id="btn-register" type="button" name="submit" value="Submit">
+    </form>
+
 
     <!-- JavaScript -->
     <script type="text/javascript" src="js/firebase.js"></script>
