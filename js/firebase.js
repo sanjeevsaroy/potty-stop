@@ -9,3 +9,5 @@ var config = {
 };
 
 firebase.initializeApp(config);
+
+// TODO: USE MY OWN DATABASE WITH LIMITED FACILITIES

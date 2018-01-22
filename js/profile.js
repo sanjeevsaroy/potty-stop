@@ -8,7 +8,7 @@ var activityList = $('#list-activity');
 
 var nameInputField = $('#input-name');
 var emailInputField = $('#input-email');
-var photoUrlInputField = $('#input-photo-url');
+var photoUrlInputField = $('#input-photo-url'); // TODO store photo url in user database table
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {

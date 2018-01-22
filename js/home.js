@@ -31,11 +31,23 @@ var map;
 
 function initMap() {
 
+  // Start from default position
   var uluru = {lat: -25.363, lng: 131.044};
 
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 4,
     center: uluru
+  });
+
+  // Close windows when clicked away from them
+  map.addListener('click', function() {
+    console.log("CLICK!");
+
+    if (openWindow != null) {
+      openWindow.close();
+      openWindow = null;
+      popupWindow.css('visibility', 'hidden');
+    }
   });
 
   // Try and get location
@@ -62,12 +74,6 @@ function initMap() {
         content: 'Your current location'
       });
 
-      // On map click (no marker)
-      map.addListener('click', function() {
-        console.log("CLICK!");
-      });
-
-
       // Marker click listener
       marker.addListener('click', function() {
         infowindow.open(map, marker);
@@ -93,6 +99,7 @@ var locationsRef = database.ref('locations')
 var geofire = new GeoFire(locationsRef);
 
 var headingField = $('#name');
+var coverPhoto = $('#image').find('img');
 var hasChangingField = $('#hasChanging');
 var hasFeedingField = $('#hasFeeding');
 var hasWarmingField = $('#hasWarming');
@@ -103,6 +110,9 @@ var privacyRatingField = $('#rating-privacy');
 
 var emptyStar = '<i class="fa fa-star-o" aria-hidden="true"></i>';
 var fullStar = '<i class="fa fa-star" aria-hidden="true"></i>';
+
+var commentSection = $('#comments');
+var noCommentsText = $('#text-no-comments');
 
 var openWindow;
 var popupWindow = $('#pop-up-facility');
@@ -116,7 +126,7 @@ closeBtn.click(function() {
   }
 });
 
-facilitiesRef.limitToFirst(2500).on('value', function(snapshot) {
+facilitiesRef.limitToFirst(2500).once('value', function(snapshot) {
   snapshot.forEach(function (childsnapshot) {
     var key = childsnapshot.key;
 
@@ -125,13 +135,6 @@ facilitiesRef.limitToFirst(2500).on('value', function(snapshot) {
 
       // Place marker
       var childData = childsnapshot.val();
-
-      // var contentString =
-      // '<img src="https://images.unsplash.com/photo-1504087697492-238a6bf49ce8?auto=format&fit=crop&w=500&q=180" alt="Facility Image">'
-      // + '<h1>' + childData.name + '</h1>'
-      // + "Changing : " + childData.facilities.changing + '</br>'
-      // + "Feeding: " + childData.facilities.feeding + '</br>'
-      // + "Warming : " + childData.facilities.warming + '</br>';
 
       // Create infoWindow
       var infowindow = new google.maps.InfoWindow({
@@ -146,23 +149,13 @@ facilitiesRef.limitToFirst(2500).on('value', function(snapshot) {
         icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|944'
       });
 
-      // // Add a marker listener
-      // marker.addListener('click', function() {
-      //   infowindow.open(map, marker);
-      //
-      //   // Close existing info windows that are open
-      //   if (openWindow != null) {
-      //     openWindow.close();
-      //   }
-      //
-      //   openWindow = infowindow;
-      // });
-
-      // Center map on the selected marker
+      // Load the facility information when its marker is clicked
       marker.addListener('click', function() {
         map.panTo(marker.position);
 
         infowindow.open(map, marker);
+
+        noCommentsText.css('visibility', 'hidden');
 
         // On InfoWindow Close
         google.maps.event.addListener(infowindow,'closeclick',function() {
@@ -171,7 +164,7 @@ facilitiesRef.limitToFirst(2500).on('value', function(snapshot) {
         });
 
         // Close existing info windows that are open
-        if (openWindow != null) {
+        if (openWindow != null && openWindow != infowindow) {
           openWindow.close();
         }
         openWindow = infowindow;
@@ -206,6 +199,38 @@ facilitiesRef.limitToFirst(2500).on('value', function(snapshot) {
           }
         }
 
+        // Display comments
+        firebase.database().ref('comments/' + key).once('value', function(snapshot) {
+
+          if (snapshot.val() == null) {
+            console.log("No comments found");
+            noCommentsText.css('visibility', 'visible');
+            noCommentsText.css('display', '');
+          }
+          else {
+            noCommentsText.css('visibility', 'hidden');
+            noCommentsText.css('display', 'none');
+            commentSection.html('');
+
+            snapshot.forEach(function (childsnapshot) {
+              var val = childsnapshot.val();
+
+              var datetime = convertToDate(val.createdAt);
+
+              // Get the user's name
+              var userId = val.user;
+
+              for (var i = 0; i < 5; i++) {
+                firebase.database().ref('users/' + userId + '/name').once('value', function(snapshot) {
+                  var name = snapshot.val();
+                  var comment = $('<p class="comment">"' + val.text + '" <br>' + name + ', ' + datetime + '</p>');
+                  commentSection.prepend(comment);
+                });
+              }
+            });
+          }
+        });
+
         // Show pop-up
         popupWindow.css('visibility', 'visible');
       });
@@ -213,3 +238,19 @@ facilitiesRef.limitToFirst(2500).on('value', function(snapshot) {
     });
   });
 });
+
+function convertToDate(timestamp) {
+  var datetime = new Date(timestamp);
+
+  var date = datetime.toLocaleDateString();
+  var time = datetime.getHours() + ':' + datetime.getMinutes();
+
+  var isToday = (new Date().toDateString() == datetime.toDateString());
+
+  if (isToday) {
+    return time;
+  }
+  else {
+    return date;;
+  }
+}
