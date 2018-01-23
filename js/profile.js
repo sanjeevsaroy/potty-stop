@@ -5,6 +5,7 @@ var totalFacilitiesField = $('#total-facilities');
 var totalCommentsField = $('#total-comments');
 var totalRatingsField = $('#total-ratings');
 var activityList = $('#list-activity');
+var noActivityText = $('#text-no-activity');
 
 var nameInputField = $('#input-name');
 var emailInputField = $('#input-email');
@@ -68,23 +69,30 @@ firebase.auth().onAuthStateChanged(function(user) {
           // Add activity list
           var activities = val.activity;
 
-          // Convert into array
-          activities = $.map(activities, function(value, index) {
-            return [value];
-          });
+          if (activities === undefined) {
+            noActivityText.css('display', 'block');
+          }
+          else {
+            noActivityText.css('display', '');
 
-          // Sort in chronological order
-          activities.sort(function(a, b){
-              return a.createdAt-b.createdAt;
-          });
+            // Convert into array
+            activities = $.map(activities, function(value, index) {
+              return [value];
+            });
 
-          for (var i = 0; i < activities.length; i++) {
-            var obj = activities[i];
-            var activity = new Activity(obj.name, obj.type, obj.createdAt);
+            // Sort in chronological order
+            activities.sort(function(a, b){
+                return a.createdAt-b.createdAt;
+            });
 
-            // Insert into activity list
-            var activityListItem = createActivityListItem(activity);
-            activityList.append(activityListItem);
+            for (var i = 0; i < activities.length; i++) {
+              var obj = activities[i];
+              var activity = new Activity(obj.name, obj.type, obj.createdAt);
+
+              // Insert into activity list
+              var activityListItem = createActivityListItem(activity);
+              activityList.append(activityListItem);
+            }
           }
       })
       .catch(function(error) {

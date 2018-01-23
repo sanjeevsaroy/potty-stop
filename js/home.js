@@ -96,7 +96,9 @@ function initMap() {
 var database = firebase.database();
 var facilitiesRef = database.ref('facilities');
 var locationsRef = database.ref('locations')
+var locations2Ref = database.ref('locations_2')
 var geofire = new GeoFire(locationsRef);
+var geofire2 = new GeoFire(locations2Ref);
 
 var headingField = $('#name');
 var coverPhoto = $('#image').find('img');
@@ -126,8 +128,9 @@ closeBtn.click(function() {
   }
 });
 
-facilitiesRef.limitToFirst(2500).once('value', function(snapshot) {
+facilitiesRef.limitToFirst(100).once('value', function(snapshot) {
   snapshot.forEach(function (childsnapshot) {
+
     var key = childsnapshot.key;
 
     // Get facility location
@@ -155,7 +158,7 @@ facilitiesRef.limitToFirst(2500).once('value', function(snapshot) {
 
         infowindow.open(map, marker);
 
-        noCommentsText.css('visibility', 'hidden');
+        noCommentsText.css('display', 'none');
 
         // On InfoWindow Close
         google.maps.event.addListener(infowindow,'closeclick',function() {
@@ -204,11 +207,9 @@ facilitiesRef.limitToFirst(2500).once('value', function(snapshot) {
 
           if (snapshot.val() == null) {
             console.log("No comments found");
-            noCommentsText.css('visibility', 'visible');
-            noCommentsText.css('display', '');
+            noCommentsText.css('display', 'block');
           }
           else {
-            noCommentsText.css('visibility', 'hidden');
             noCommentsText.css('display', 'none');
             commentSection.html('');
 

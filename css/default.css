@@ -79,7 +79,7 @@
 }
 
 #text-no-comments {
-  visibility: hidden;
+  display: none;
 }
 
 #comments {
@@ -93,6 +93,10 @@
 
 button {
   margin: 10px;
+}
+
+#text-no-activity {
+  display: none;
 }
 
 #form-edit-profile {
