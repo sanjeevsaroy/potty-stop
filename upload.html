@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Upload - Potty Stop</title>
+
+      <!-- CSS Styling -->
+      <link rel="stylesheet" href="css/default.css">
+      <!-- jQuery -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <!-- Font Awesome -->
+      <link rel="stylesheet" href="https://use.fontawesome.com/5afdbdcf18.css">
+      <!-- Firebase Imports -->
+      <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-auth.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-database.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/3.7.0/firebase.js"></script>
+
+      <!-- GeoFire -->
+      <script src="https://cdn.firebase.com/libs/geofire/4.1.2/geofire.min.js"></script>
+    </head>
+  <body>
+
+    <!-- Back button -->
+    <button id="btn-back" type="button" name="button">Go back</button><br>
+
+    <!-- Facility form -->
+    Name: <input type="text" name="" value=""><br>
+    <p>
+      Facilities: <br>
+      Changing: <input type="checkbox" name="" value="hasChanging" checked><br>
+      Feeding: <input type="checkbox" name="" value="hasFeeding"><br>
+      Warming: <input type="checkbox" name="" value="hasWarming"><br>
+    </p>
+
+    <!-- Google Map -->
+    Set the facility location:
+    <div id="map-small"></div>
+
+    <!-- Upload Button -->
+    <button id="btn-upload" type="button" name="button">Upload</button>
+
+    <!-- JavaScript -->
+    <script type="text/javascript" src="js/firebase.js"></script>
+    <script type="text/javascript" src="js/upload.js"></script>
+    <!-- Google Maps -->
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBeJd3CwcJzuzCbKkrL-pWAmqYgzX6yjjs&callback=initMap">
+    </script>
+  </body>
+</html>

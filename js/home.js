@@ -26,17 +26,23 @@ $('#btn-view-profile').click(function() {
   window.location.href = "profile.html";
 });
 
+// View profile listener
+$('#btn-upload-facility').click(function() {
+  window.location.href = "upload.html";
+});
+
 // Load maps
 var map;
 
 function initMap() {
 
   // Start from default position
-  var uluru = {lat: -25.363, lng: 131.044};
+  // var uluru = {lat: -0.1276250, lng: 51.5033640};
+  var london = {lat: 51.5033640, lng: -0.1276250};
 
   map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 4,
-    center: uluru
+    zoom: 7,
+    center: london
   });
 
   // Close windows when clicked away from them
@@ -128,7 +134,7 @@ closeBtn.click(function() {
   }
 });
 
-facilitiesRef.limitToFirst(100).once('value', function(snapshot) {
+facilitiesRef.once('value', function(snapshot) {
   snapshot.forEach(function (childsnapshot) {
 
     var key = childsnapshot.key;

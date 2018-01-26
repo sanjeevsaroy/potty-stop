@@ -8,6 +8,12 @@
   background-color: gray;
 }
 
+#map-small {
+  width: 75vh;
+  height: 75vh;
+  background-color: gray;
+}
+
 /* TODO: make pop-up all scrollable */
 
 #pop-up-facility {
