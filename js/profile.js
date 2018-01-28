@@ -91,7 +91,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
               // Insert into activity list
               var activityListItem = createActivityListItem(activity);
-              activityList.append(activityListItem);
+              activityList.prepend(activityListItem);
             }
           }
       })
@@ -109,32 +109,54 @@ firebase.auth().onAuthStateChanged(function(user) {
 function createActivityListItem(activity) {
   var activityListItem;
 
-  var date = convertToDate(activity.createdAt);
+  var datetime = convertToDate(activity.createdAt);
 
   if (activity.type === 'facility') {
-    activityListItem = $('<li>You created the facility ' + activity.name + ' at ' + date + '</li>');
+    activityListItem = $('<li>You created the facility ' + activity.name + ' at ' + datetime + '.</li>');
   }
   else {
-    activityListItem = $('<li>You created a comment on ' + activity.name + ' at ' + date + '</li>');
+    activityListItem = $('<li>You created a comment on ' + activity.name + ' at ' + datetime + '.</li>');
   }
 
   return activityListItem;
 }
 
 function convertToDate(timestamp) {
-  var datetime = new Date(timestamp);
+  var datetime = new Date(timestamp*1000);
+  var monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
 
   var date = datetime.toLocaleDateString();
-  var time = datetime.getHours() + ':' + datetime.getMinutes();
+
+  var dateNum = date.split("/")[0];
+  dateNum = getOrdinalNum(dateNum);
+
+  var dateMonth = date.split("/")[1];
+  dateMonth = monthNames[Number(dateMonth)];
+
+  var dateYear = date.split("/")[2];
+
+  var minutes = datetime.getMinutes();
+  if (String(minutes).length === 1) {
+    minutes = "0" + minutes;
+  }
+
+  var time = datetime.getHours() + ':' + minutes;
+  console.log(time);
 
   var isToday = (new Date().toDateString() == datetime.toDateString());
 
   if (isToday) {
-    return time;
+    return time + ' today';
   }
   else {
-    return date;;
+    return dateNum + ' ' + dateMonth + ' ' + dateYear;
   }
+}
+
+function getOrdinalNum(n) {
+  return n + (n > 0 ? ['th', 'st', 'nd', 'rd'][(n > 3 && n < 21) || n % 10 > 3 ? 0 : n % 10] : '');
 }
 
 function Activity(name, type, createdAt) {
