@@ -54,6 +54,18 @@ $('#btn-login').click( function() {
   }
 });
 
+$('#btn-forgot-pwd').click(function() {
+  var emailAddress = prompt('Please enter your email address to reset your password');
+
+  firebase.auth().sendPasswordResetEmail(emailAddress).then(function() {
+    alert('A password reset link has been sent to ' + emailAddress + '.');
+  })
+  .catch(function(error) {
+    alert(error.message);
+    console.log(error);
+  });
+});
+
 // Register Form
 $('#btn-register').click( function() {
   registeringUser = true;
