@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Login - Potty Stop</title>
+
+    <!-- CSS Styling -->
+    <link rel="stylesheet" href="css/default.css">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Firebase Imports -->
+    <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-database.js"></script>
+  </head>
+  <body>
+
+    <!-- Login Form -->
+    <h1>Log in!</h1>
+
+    <form id="form-login" method="post">
+      Email Address: <input class="input-email" type="text" name="" value=""><br>
+      Password: <input class="input-pwd" type="password" name="" value=""><br>
+      <input id="btn-forgot-pwd" type="button" name="" value="Forgot Password">
+      <input id="btn-login" type="button" name="submit" value="Submit">
+    </form>
+
+    <!-- Register Form -->
+    <h1>Or register to use the app</h1>
+
+    <form id="form-register" method="post">
+      Full Name: <input class="input-name" type="text" name="" value=""><br>
+      Email Address: <input class="input-email" type="text" name="" value=""><br>
+      Password: <input class="input-pwd" type="password" name="" value=""><br>
+      Confirm Password: <input class="input-confirm-pwd" type="password" name="" value=""><br>
+      <input id="btn-register" type="button" name="submit" value="Submit">
+    </form>
+
+
+    <!-- JavaScript -->
+    <script type="text/javascript" src="js/firebase.js"></script>
+    <script type="text/javascript" src="js/login.js"></script>
+  </body>
+</html>

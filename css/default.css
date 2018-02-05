@@ -1,3 +1,7 @@
+
+
+/* HOME PAGE */
+
 #main {
   position: relative;
 }
@@ -95,10 +99,6 @@
 
 .comment {
   margin-bottom: 35px;
-}
-
-button {
-  margin: 10px;
 }
 
 #text-no-activity {

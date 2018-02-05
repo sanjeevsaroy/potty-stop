@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Login - Potty Stop</title>
+
+    <!-- CSS Styling -->
+    <link rel="stylesheet" href="css/index.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Coming+Soon|Quicksand:400,500" rel="stylesheet">
+    <!-- Font Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Firebase Imports -->
+    <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-database.js"></script>
+  </head>
+  <body>
+
+    <div id="container">
+      <!-- Image -->
+      <div id="container-left"></div>
+      <!-- Login & Register Section -->
+      <div id="container-right">
+        <div id="header">
+          <img class="img-logo" src="images/logo.png" alt="Logo">
+          <h2 class="text-logo handwritten">Potty Stop</h2>
+        </div>
+        <!-- Login Section -->
+        <div id="login-section">
+          <h1 class="handwritten">Let them<br>explore!</h1>
+          <div class="input-section">
+            <span class="placeholder">Email Address</span>
+            <input class="input" type="text" name="email" value="">
+          </div>
+          <div class="input-section">
+            <span class="placeholder">Password</span>
+            <input class="input smaller-margin" type="password" name="pwd" value="">
+          </div>
+          <span id="btn-forgot-pwd">Forgotten Password?</span>
+          <button class="input" id="btn-login" type="button" name="button">Login</button>
+          Don't have an account? <span class="link" id="btn-register-link">Register here for free.</span>
+        </div>
+        <!-- Register Section -->
+        <div id="register-section">
+          <h1 class="handwritten">Let them<br>explore!</h1>
+          <div class="input-section">
+            <span class="placeholder">Full Name</span>
+            <input class="input input-name" type="text" name="name" value="">
+          </div>
+          <div class="input-section">
+            <span class="placeholder">Email</span>
+            <input class="input input-email" type="text" name="email" value="">
+          </div>
+        <div class="input-section">
+            <span class="placeholder">Password</span>
+            <input class="input input-pwd" type="password" name="pwd" value="">
+          </div>
+        <div class="input-section">
+            <span class="placeholder">Confirm Password</span>
+            <input class="input input-confirm-pwd" type="password" name="confirm-pwd" value="">
+          </div>
+        <button class="input" id="btn-register" type="button" name="button">Register</button>
+          Already have an account? <span class="link" id="btn-login-link">Login here.</span>
+        </div>
+      </div>
+    </div>
+    <!-- Footer -->
+    <footer>
+      <div id="footer-left">
+        <strong>Potty Stop</strong><br>
+        <span id="text-copyright">© Gian-IT Solutions. All rights reserved 2017</span>
+      </div>
+      <!-- Social Media Links -->
+      <div id="footer-right">
+        <a target="_blank" href="https://www.facebook.com/therealpottystop"><i class="fab fa-facebook-f"></i></a>
+        <a target="_blank" href="https://twitter.com/pottystop"><i class="fab fa-twitter"></i></a>
+        <a target="_blank" href="https://www.instagram.com/pottystop/"><i class="fab fa-instagram"></i></a>
+      </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script type="text/javascript" src="js/firebase.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+  </body>
+</html>

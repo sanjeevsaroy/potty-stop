@@ -1,11 +1,48 @@
+var
+  registerSection = $('#register-section'),
+  loginSection = $('#login-section');
+
+// Hide the login section and show the registration section
+$('#btn-register-link').click(function() {
+  registerSection.css('display', 'block');
+  loginSection.css('display', 'none');
+});
+
+// Hide the registration section and show the login section
+$('#btn-login-link').click(function() {
+  registerSection.css('display', 'none');
+  loginSection.css('display', 'block');
+});
+
+// Hide the placeholder when the user clicks on an input
+$('input').on('input', function() {
+  var input = $(this).val();
+  var placeholder = $(this).prev();
+
+  // Show if no text has been input
+  if (input.length === 0) {
+    placeholder.css('visibility', 'visible');
+  }
+  else {
+    placeholder.css('visibility', 'hidden');
+  }
+});
+
+// Hide the placeholde when clicked
+$('.placeholder').click(function() {
+  var inputField = $(this).next();
+  inputField.focus();
+});
+
 var registeringUser;
 
-// Auth listener
+// Auth listener for when the user signs in or out
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     // User is signed in.
     console.log("User signed in!");
 
+    // If the user has logged in and was not registering, redirect
     if (!registeringUser) {
       window.location.href = "home.html";
     }
@@ -29,13 +66,12 @@ function login (email, pwd) {
   });
 }
 
-// Login Form
-$('#btn-login').click( function() {
+// Log the user in
+$('#btn-login').click(function() {
   registeringUser = false;
 
-  var loginForm = $('#form-login');
-  var emailInput = loginForm.find('.input-email');
-  var pwdInput = loginForm.find('.input-pwd');
+  var emailInput = loginSection.find('input[name="email"]');
+  var pwdInput = loginSection.find('input[name="pwd"]');
 
   var email = emailInput.val();
   var pwd = pwdInput.val();
@@ -54,6 +90,7 @@ $('#btn-login').click( function() {
   }
 });
 
+// Prompt the user for the account's email address they want to reset the password for
 $('#btn-forgot-pwd').click(function() {
   var emailAddress = prompt('Please enter your email address to reset your password');
 
@@ -66,26 +103,25 @@ $('#btn-forgot-pwd').click(function() {
   });
 });
 
-// Register Form
+// Register the user
 $('#btn-register').click( function() {
   registeringUser = true;
 
   var missingFields = [];
 
-  var registerForm = $('#form-register');
-  var nameInput = registerForm.find('.input-name');
-  var emailInput = registerForm.find('.input-email');
-  var pwdInput = registerForm.find('.input-pwd');
-  var confirmPwdInput = registerForm.find('.input-confirm-pwd');
+  var nameInput = registerSection.find('input[name="name"]');
+  var emailInput = registerSection.find('input[name="email"]');
+  var pwdInput = registerSection.find('input[name="pwd"]');
+  var confirmPwdInput = registerSection.find('input[name="confirm-pwd"]');
 
   var name = nameInput.val();
   var email = emailInput.val();
   var pwd = pwdInput.val();
   var confirmPwd = confirmPwdInput.val();
 
-  // Check if all fields aren't empty
+  // Check if all fields aren't empty and alert if any missing
   if (name.length === 0) {
-    missingFields.push("\n• Name");
+    missingFields.push("\n• Full name");
   }
   if (email.length === 0) {
     missingFields.push("\n• Email");
@@ -97,6 +133,7 @@ $('#btn-register').click( function() {
     missingFields.push("\n• Confirm password");
   }
 
+  // Register the user if the required information is present
   if (missingFields.length !== 0) {
     alert('The following fields are missing: ' + missingFields.join(""));
   }
@@ -106,7 +143,6 @@ $('#btn-register').click( function() {
       alert('The passwords do not match. Please enter two passwords that do.');
     }
     else {
-      // Register user
       registerUser(name, email, pwd);
     }
   }
@@ -124,9 +160,9 @@ function registerUser(name, email, pwd) {
   })
   .then(function() {
     if (!hasError) {
-      console.log("GRAT SUKSESS!");
+      console.log("User registered!");
 
-      // Register other user's details
+      // Register other user's details before redirecting
       var user = firebase.auth().currentUser;
 
       user.updateProfile({
@@ -143,6 +179,7 @@ function registerUser(name, email, pwd) {
             createdAt: millis
         })
         .then(function() {
+          // Redirect to home screen
           window.location.href = "home.html";
         });
       });

@@ -10,7 +10,7 @@ firebase.auth().onAuthStateChanged(function(user) {
   else {
     // User is signed out.
     console.log("User signed out!");
-    window.location.href = "login.html";
+    window.location.href = "index.html";
   }
 });
 
