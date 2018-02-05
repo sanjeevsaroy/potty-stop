@@ -4,14 +4,16 @@ var
 
 // Hide the login section and show the registration section
 $('#btn-register-link').click(function() {
-  registerSection.css('display', 'block');
-  loginSection.css('display', 'none');
+  loginSection.fadeOut('slow', function() {
+    registerSection.fadeIn();
+  });
 });
 
 // Hide the registration section and show the login section
 $('#btn-login-link').click(function() {
-  registerSection.css('display', 'none');
-  loginSection.css('display', 'block');
+  registerSection.fadeOut('slow', function() {
+    loginSection.fadeIn();
+  });
 });
 
 // Hide the placeholder when the user clicks on an input
