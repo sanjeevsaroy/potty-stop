@@ -1,11 +1,9 @@
-// Assign email to heading
-var nameHeading = $('#heading-name');
-
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     // User is signed in.
     console.log("User signed in!");
-    nameHeading.text(user.displayName);
+    // Display the user's name
+    $('#heading-name').text(user.displayName);
   }
   else {
     // User is signed out.
@@ -33,13 +31,11 @@ $('#btn-upload-facility').click(function() {
 
 // Load maps
 var map;
+var london = {lat: 51.5033640, lng: -0.1276250};
 
 function initMap() {
 
   // Start from default position
-  // var uluru = {lat: -0.1276250, lng: 51.5033640};
-  var london = {lat: 51.5033640, lng: -0.1276250};
-
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 7,
     center: london
@@ -52,8 +48,15 @@ function initMap() {
     if (openWindow != null) {
       openWindow.close();
       openWindow = null;
-      popupWindow.css('visibility', 'hidden');
     }
+
+    if (selectedMarker != null) {
+      selectedMarker.setIcon(defaultMarkerIcon);
+      selectedMarker = null;
+    }
+
+    $('#note-text').css('display', 'flex');
+    $('#facility-info').css('display', 'none');
   });
 
   // Try and get location
@@ -106,35 +109,48 @@ var locations2Ref = database.ref('locations_2')
 var geofire = new GeoFire(locationsRef);
 var geofire2 = new GeoFire(locations2Ref);
 
-var headingField = $('#name');
-var coverPhoto = $('#image').find('img');
-var hasChangingField = $('#hasChanging');
-var hasFeedingField = $('#hasFeeding');
-var hasWarmingField = $('#hasWarming');
+var titleField = $('#title');
+var facilitiesField = $('#facilities');
 
 var cleanlinessRatingField = $('#rating-cleanliness');
 var facilitiesRatingField = $('#rating-facilities');
 var privacyRatingField = $('#rating-privacy');
 
-var emptyStar = '<i class="fa fa-star-o" aria-hidden="true"></i>';
-var fullStar = '<i class="fa fa-star" aria-hidden="true"></i>';
+var fullStar = '<i class="fas fa-star"></i>';
+var emptyStar = '<i class="far fa-star"></i>';
 
 var commentSection = $('#comments');
-var noCommentsText = $('#text-no-comments');
+var noCommentsText = $('#no-comments-text');
 
 var openWindow;
-var popupWindow = $('#pop-up-facility');
-var closeBtn = $('#btn-close');
-
-closeBtn.click(function() {
-  if (openWindow != null) {
-    openWindow.close();
-    openWindow = null;
-    popupWindow.css('visibility', 'hidden');
-  }
-});
+var selectedMarker = null;
+var defaultMarkerIcon = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|9BDEFA';
+var selectedMarkerIcon = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|9D95F0';
 
 facilitiesRef.once('value', function(snapshot) {
+
+  $('#loading-screen').fadeOut('slow', function() {
+
+    $('#amount-loaded').text(snapshot.numChildren());
+    $('#container').css('display', 'flex');
+
+    // Set map camera view
+    window.dispatchEvent(new Event('resize'));
+    map.setCenter(london);
+
+    $('#container').fadeIn('slow', function() {
+      $('#popup-facilities').animate({
+        top: '0'
+      }, 750, function() {
+        setTimeout(function() {
+          $('#popup-facilities').animate({
+            top: '-70px'
+          }, 750);
+        }, 4000);
+      });
+    });
+  });
+
   snapshot.forEach(function (childsnapshot) {
 
     var key = childsnapshot.key;
@@ -155,12 +171,23 @@ facilitiesRef.once('value', function(snapshot) {
       var marker = new google.maps.Marker({
         position: pos,
         map: map,
-        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|944'
+        icon: defaultMarkerIcon
       });
 
       // Load the facility information when its marker is clicked
       marker.addListener('click', function() {
         map.panTo(marker.position);
+
+        // Hide info box note
+        $('#note-text').css('display', 'none');
+        $('#facility-info').css('display', 'block');
+
+        // Change marker colours
+        if (selectedMarker !== null) {
+          selectedMarker.setIcon(defaultMarkerIcon);
+        }
+        selectedMarker = marker;
+        marker.setIcon(selectedMarkerIcon);
 
         infowindow.open(map, marker);
 
@@ -169,7 +196,6 @@ facilitiesRef.once('value', function(snapshot) {
         // On InfoWindow Close
         google.maps.event.addListener(infowindow,'closeclick',function() {
           openWindow = null;
-          popupWindow.css('visibility', 'hidden');
         });
 
         // Close existing info windows that are open
@@ -183,10 +209,24 @@ facilitiesRef.once('value', function(snapshot) {
           name = name.substr(1).slice(0, -1);
         }
 
-        headingField.text(name);
-        hasChangingField.text(childData.facilities.changing);
-        hasFeedingField.text(childData.facilities.feeding);
-        hasWarmingField.text(childData.facilities.warming);
+        titleField.text(name);
+
+        var facilitiesString = '';
+
+        if (childData.facilities.changing) {
+          facilitiesString = 'Changing';
+        }
+        if (childData.facilities.feeding) {
+          facilitiesString = ', Feeding';
+        }
+        if (childData.facilities.warming) {
+          facilitiesString = ', Warming';
+        }
+
+        if (facilitiesString.length === 0) {
+          facilitiesString = 'There are no facilities.';
+        }
+        facilitiesField.text(facilitiesString);
 
         // Display rating stars
         var ratingFields = [cleanlinessRatingField, facilitiesRatingField, privacyRatingField];
@@ -237,9 +277,6 @@ facilitiesRef.once('value', function(snapshot) {
             });
           }
         });
-
-        // Show pop-up
-        popupWindow.css('visibility', 'visible');
       });
 
     });
@@ -261,3 +298,30 @@ function convertToDate(timestamp) {
     return date;;
   }
 }
+
+// Hide the placeholder when the user clicks on an input
+$('input').on('input', function() {
+  var input = $(this).val();
+  var placeholder = $(this).prev();
+
+  // Show if no text has been input
+  if (input.length === 0) {
+    placeholder.css('visibility', 'visible');
+  }
+  else {
+    placeholder.css('visibility', 'hidden');
+  }
+});
+
+// Hide the placeholde when clicked
+$('.placeholder').click(function() {
+  var inputField = $(this).next();
+  inputField.focus();
+});
+
+$('#cancel-btn').click(function() {
+  var inputField = $('input[name="comment"]');
+  var placeholder = $('.placeholder');
+  inputField.val('');
+  placeholder.css('visibility', 'visible');
+})

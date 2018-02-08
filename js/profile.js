@@ -1,15 +1,44 @@
+var activityLink = $('#activity-link');
+var activitySection = $('#activity-section');
+var editProfileLink = $('#edit-profile-link');
+var editProfileSection = $('#edit-profile-section');
+
+activityLink.click(function() {
+  activityLink.addClass('active');
+  editProfileLink.removeClass('active');
+
+  activityLink.next().addClass('active');
+  editProfileLink.next().removeClass('active');
+
+  editProfileSection.fadeOut('slow', function() {
+    activitySection.fadeIn('slow');
+  });
+});
+
+editProfileLink.click(function() {
+  activityLink.removeClass('active');
+  editProfileLink.addClass('active');
+
+  activityLink.next().removeClass('active');
+  editProfileLink.next().addClass('active');
+
+  activitySection.fadeOut('slow', function() {
+    editProfileSection.fadeIn('slow');
+  });
+});
+
 // Assign email to heading
-var nameHeading = $('#heading-name');
-var profileImage = $('#img-profile');
-var totalFacilitiesField = $('#total-facilities');
-var totalCommentsField = $('#total-comments');
-var totalRatingsField = $('#total-ratings');
-var activityList = $('#list-activity');
+var nameHeading = $('#user-name');
+var profileImage = $('#user-img');
+var totalFacilitiesField = $('#stats-facilities');
+var totalCommentsField = $('#stats-comments');
+var totalRatingsField = $('#stats-ratings');
+var activityList = $('#activities');
 var noActivityText = $('#text-no-activity');
 
-var nameInputField = $('#input-name');
-var emailInputField = $('#input-email');
-var photoUrlInputField = $('#input-photo-url'); // TODO store photo url in user database table
+var nameInputField = $('input[name="name"]');
+var emailInputField = $('input[name="email"]');
+var photoUrlInputField = $('input[name="photo-url"]');
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
@@ -18,9 +47,9 @@ firebase.auth().onAuthStateChanged(function(user) {
 
     // User info
     nameHeading.text(user.displayName);
-    profileImage.attr('src', user.photoURL);
     nameInputField.attr('value', user.displayName);
     emailInputField.attr('value', user.email);
+    photoUrlInputField.attr('value', user.photoURL);
 
     if (user.photoURL === null) {
       profileImage.attr('src', 'https://www.menon.no/wp-content/uploads/person-placeholder.jpg');
@@ -28,6 +57,8 @@ firebase.auth().onAuthStateChanged(function(user) {
     else {
       profileImage.attr('src', user.photoURL);
     }
+
+    storeCurrentUserData();
 
     // Get user actions
     firebase.database().ref('users/' + user.uid).once('value')
@@ -70,10 +101,9 @@ firebase.auth().onAuthStateChanged(function(user) {
           var activities = val.activity;
 
           if (activities === undefined) {
-            noActivityText.css('display', 'block');
+            noActivityText.css('display', 'flex');
           }
           else {
-            noActivityText.css('display', '');
 
             // Convert into array
             activities = $.map(activities, function(value, index) {
@@ -112,10 +142,10 @@ function createActivityListItem(activity) {
   var datetime = convertToDate(activity.createdAt);
 
   if (activity.type === 'facility') {
-    activityListItem = $('<li>You created the facility ' + activity.name + ' at ' + datetime + '.</li>');
+    activityListItem = $('<div class="activity">You created the facility <span class="purple bold">' + activity.name + '</span><div class="datetime">' + datetime + '</div></div>');
   }
   else {
-    activityListItem = $('<li>You created a comment on ' + activity.name + ' at ' + datetime + '.</li>');
+    activityListItem = $('<div class="activity">You created a comment on <span class="purple bold">' + activity.name + '</span> at ' + datetime + '.</div>');
   }
 
   return activityListItem;
@@ -184,7 +214,7 @@ var currentName;
 var currentEmail;
 var currentPhotoUrl;
 
-function getCurrentUserInfo() {
+function storeCurrentUserData() {
   var user = firebase.auth().currentUser;
 
   // Get existing values
@@ -192,26 +222,6 @@ function getCurrentUserInfo() {
   currentEmail = user.email;
   currentPhotoUrl = user.photoURL;
 }
-
-// Edit profile button
-$('#btn-edit-profile').click(function() {
-
-  getCurrentUserInfo();
-
-  // Remove previous notice of any successfully-saved changes
-  showSaveSuccess(false);
-
-  if (isEditing) {
-    isEditing = false;
-    form.css('visibility', 'hidden');
-  }
-  else {
-    isEditing = true;
-    form.css('visibility', 'visible');
-
-    console.log(currentName, currentEmail, currentPhotoUrl);
-  }
-});
 
 $('#btn-save').click(function() {
 
@@ -333,9 +343,14 @@ function updatePhotoUrl(user, photoUrl) {
 
 function showSaveSuccess(isSuccessful) {
   if (isSuccessful) {
-    saveSuccessNotice.css('visibility', 'visible');
-  }
-  else {
-    saveSuccessNotice.css('visibility', 'hidden');
+    $('#popup-saved-changes').animate({
+      top: '0'
+    }, 750, function() {
+      setTimeout(function() {
+        $('#popup-saved-changes').animate({
+          top: '-70px'
+        }, 750);
+      }, 4000);
+    });
   }
 }
