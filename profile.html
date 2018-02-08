@@ -5,9 +5,11 @@
     <title>Profile - Potty Stop</title>
 
     <!-- CSS Styling -->
-    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="css/profile.css">
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Font Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <!-- Firebase Imports -->
     <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-auth.js"></script>
@@ -15,37 +17,110 @@
     <script src="https://www.gstatic.com/firebasejs/3.7.0/firebase.js"></script>
   </head>
   <body>
-    <!-- Profile heading -->
-    <h1>Welcome to your profile, <span id="heading-name"></span></h1>
-    <img id="img-profile" src="" alt="Profile Picture"><br>
 
-    <!-- Information -->
-    <b>Facilities:</b> <span id="total-facilities"></span><br>
-    <b>Comments:</b> <span id="total-comments"></span><br>
-    <b>Ratings:</b> <span id="total-ratings"></span><br>
+    <!-- HEADER -->
+    <header id="header">
+      <div id="header-left">
+        <img class="img-logo" src="images/logo.png" alt="Logo">
+        <h2 class="text-logo handwritten">Potty Stop</h2>
+      </div>
+      <div id="header-middle">
+        <div class="link-section">
+          <a href="home.html"><img src="images/map.png" alt="Map"></a>
+        </div>
+        <div class="link-section">
+          <a class="active" href="profile.html"><img src="images/profile.png" alt="Profile"></a>
+          <span class="underline active"></span>
+        </div>
+      </div>
+      <div id="header-right">
+        <span id="btn-logout" class="link">Log Out</span>
+      </div>
+    </header>
 
-    <!-- Activity -->
-    <h3>Activity:</h3>
-    <span id="text-no-activity">None.</span>
-    <ol id="list-activity"></ol>
+    <!-- MAIN -->
+    <div id="main">
+      <!-- Profile Card -->
+      <div id="container-left">
+        <div id="card">
+          <div id="image-section">
+            <img id="user-img" src="" alt="Profile Picture">
+          </div>
+          <h2 class="heading" id="user-name"></h2>
+          <div id="user-stats">
+            <div class="col-stats">
+              <span class="sub-heading">Facilities</span>
+              <span id="stats-facilities" class="data"></span>
+            </div>
+            <div class="col-stats">
+              <span class="sub-heading">Comments</span>
+              <span id="stats-comments" class="data"></span>
+            </div>
+            <div class="col-stats">
+              <span class="sub-heading">Ratings</span>
+              <span id="stats-ratings" class="data"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Activity & Edit Profile Section -->
+      <div id="container-right">
+        <div id="container-right-header">
+          <div class="header-section">
+            <div class="link-section">
+              <span id="activity-link" class="link active">Activity</span>
+              <span class="underline active"></span>
+            </div>
+          </div>
+          <div class="header-section">
+            <div class="link-section">
+              <span id="edit-profile-link" class="link">Edit Profile</span>
+              <span class="underline"></span>
+            </div>
+          </div>
+        </div>
+        <!-- Activity Section -->
+        <div id="activity-section">
+          <div id="activities">
+            <span id="text-no-activity">There are no activities.</span>
+          </div>
+        </div>
+        <!-- Edit Profile Section -->
+        <div id="edit-profile-section">
+          <div id="popup-saved-changes">Changes saved</div>
+          <form id="form-edit-profile" class="" method="post">
+            <div class="">
+              <span class="input-label">Full Name</span>
+              <input class="input" type="text" name="name" value="">
+            </div>
+            <div class="">
+              <span class="input-label">Email Address</span>
+              <input class="input" type="text" name="email" value="">
+            </div>
+            <div class="">
+              <span class="input-label">Photo URL</span>
+              <input class="input" type="text" name="photo-url" value="">
+            </div>
+            <button class="input" id="btn-save" type="button" name="button">Save Changes</button>
+            <!-- TODO <span id="notice-save-successful">Changes saved!</span> -->
+          </form>
+        </div>
+      </div>
+    </div>
 
-    <hr>
-    <!-- Back button -->
-    <button id="btn-back" type="button" name="button">Go back</button><br>
-    <!-- Log Out button -->
-    <button id="btn-logout" type="button" name="button">Log Out</button><br>
-    <!-- Edit Profile button -->
-    <button id="btn-edit-profile" type="button" name="button">Edit Profile</button>
-
-    <form id="form-edit-profile" class="" method="post">
-      Name: <input id="input-name" type="text" name="" value=""><br>
-      Email: <input id="input-email" type="text" name="" value=""><br>
-      Photo URL: <input id="input-photo-url" type="text" name="" value=""><br>
-      <button id="btn-save" type="button" name="button">Save Changes</button>
-      <span id="notice-save-successful">Changes saved!</span>
-    </form>
-
-
+    <!-- FOOTER -->
+    <footer>
+      <div id="footer-left">
+        <strong>Potty Stop</strong><br>
+        <span id="text-copyright">© Gian-IT Solutions. All rights reserved 2017</span>
+      </div>
+      <!-- Social Media Links -->
+      <div id="footer-right">
+        <a target="_blank" href="https://www.facebook.com/therealpottystop"><i class="fab fa-facebook-f"></i></a>
+        <a target="_blank" href="https://twitter.com/pottystop"><i class="fab fa-twitter"></i></a>
+        <a target="_blank" href="https://www.instagram.com/pottystop/"><i class="fab fa-instagram"></i></a>
+      </div>
+    </footer>
 
     <!-- JavaScript -->
     <script type="text/javascript" src="js/firebase.js"></script>

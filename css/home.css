@@ -1,0 +1,314 @@
+body {
+  margin: 0;
+  font-family: 'Quicksand', sans-serif;
+  color: darkgray;
+  height: 100vh;
+}
+
+.handwritten {
+  font-family: 'Coming Soon', cursive;
+}
+
+/* HEADER */
+#header {
+  display: flex;
+  align-items: center;
+  padding: 0 50px;
+  box-shadow: 0 0 5px #c0c0c0;
+  position: relative;
+  z-index: 11;
+  height: 10%;
+}
+
+#header>div {
+  flex: 1;
+}
+
+#header>div:not(:nth-child(2)) {
+  flex: 3;
+}
+
+#header-left {
+  display: flex;
+  align-items: center;
+}
+
+.img-logo {
+  margin-right: 10px;
+  width: 4%;
+}
+
+.text-logo {
+  display: inline;
+  font-size: 12pt;
+  color: #98B9E3;
+}
+
+#header-middle {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#header-middle img {
+  width: 24px;
+  filter: grayscale(100%);
+  margin: 0 10px;
+}
+
+#header-middle a.active img {
+  filter: grayscale(0);
+
+}
+
+#header-middle a img:hover {
+  filter: grayscale(0);
+}
+
+.link-section {
+  position: relative;
+}
+
+.underline {
+  position: absolute;
+  border-bottom: 1px solid #9BDEFA;
+  width: 100%;
+  text-align: center;
+  bottom: -6px;
+}
+
+#header-right {
+  text-align: right;
+  color: #9BDEFA;
+}
+
+.link {
+  cursor: pointer;
+  color: #9BDEFA;
+}
+
+/* MAIN SECTION */
+#main {
+  width: 100%;
+  height: 82.5%;
+  display: flex;
+}
+
+#loading-screen {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48pt;
+  font-weight: lighter;
+  color: #9D95F0;
+}
+
+#container {
+  display: none;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+#popup-facilities {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  z-index: 11;
+  background-color: #9D95F0;
+  padding: 25px 0;
+  color: white;
+  font-weight: lighter;
+  font-size: 12pt;
+  top: -70px;
+}
+
+#amount-loaded {
+  font-weight: bold;
+}
+
+#map {
+  height: 100%;
+  flex: 3;
+}
+
+/* FACILITY INFORMATION */
+
+#facility-info {
+  display: none;
+}
+
+#image {
+  width: 100%;
+}
+
+#info-section {
+  flex: 1;
+  box-shadow: 20px 0 5px -20px #c0c0c0;
+  z-index: 10;
+  height: 100%;
+  overflow: scroll;
+}
+
+#note-text {
+  height: 100%;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ccc;
+  font-size: 14pt;
+  text-align: center;
+  font-weight: lighter;
+}
+
+#info {
+  padding: 0 50px;
+  margin-bottom: 25px;
+  padding-bottom: 50px;
+  border-bottom: 1px solid #e9e9e9;
+}
+
+#title {
+  color: #98B9E3;
+  margin: 40px 0;
+  font-weight: lighter;
+  font-size: 20pt;
+}
+
+#facilities-section {
+  margin-bottom: 35px;
+}
+
+.sub-heading, .heading {
+  font-weight: lighter;
+  display: block;
+}
+
+.sub-heading {
+  font-size: 10pt;
+}
+
+.data {
+  color: #9BACFA;
+}
+
+#rating-section {
+  display: flex;
+  justify-content: space-between;
+}
+
+.col-rating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* COMMENTS */
+
+.heading {
+  color: #9BACFA;
+  margin-bottom: 25px;
+}
+
+#comment-section .heading, #comment-input {
+  padding: 0 50px;
+}
+
+#comment-input-buttons {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+#input-section {
+  position: relative;
+  font-size: 11pt;
+}
+
+.placeholder {
+  position: absolute;
+  top: 0;
+  left: 3px;
+  color: #e0e0e0;
+}
+
+#comment-input input {
+  width: 100%;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  font-family: 'Quicksand', sans-serif;
+  color: gray;
+  font-size: 11pt;
+}
+
+#comment-input-buttons {
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 10pt;
+}
+
+#cancel-btn {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+#publish-btn {
+  text-align: right;
+  padding: 10px;
+  background-color: #98B9E3;
+  border-radius: 50px;
+  color: white;
+  cursor: pointer;
+}
+
+#comments {
+  padding: 0 35px;
+  font-size: 11pt;
+  margin-bottom: 50px;
+}
+
+#no-comments-text {
+  padding: 0 15px;
+}
+
+/* FOOTER */
+
+footer {
+  /* position: fixed;
+  bottom: 0; */
+  position: relative;
+  height: 7.5%;
+  box-shadow: 0 0 5px #c0c0c0;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+}
+
+footer > div {
+  width: 50%;
+  padding: 0 75px;
+}
+
+#text-copyright {
+  color: #ccc;
+  font-size: 10pt;
+}
+
+#footer-left {
+  font-size: 11pt;
+}
+
+#footer-right {
+  text-align: right;
+}
+
+#footer-right a {
+  margin: 0 10px;
+  color: #9BDEFA;
+}
